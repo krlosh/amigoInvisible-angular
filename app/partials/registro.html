@@ -1,0 +1,33 @@
+<div id="form_container">
+	<h1><a>Amigo invisible</a></h1>
+	<form class="appnitro" method="post" id="formulario" name="formulario" >		
+		<div class="form_description">
+			<h2>Hola</h2>
+			<p></p>
+		</div>
+		<ul>
+			<li><label class="description" for="login">Nombre</label>
+				<input ng-model="nuevo.login" id="login" name="login" class="element text medium" type="text" maxlength="255" value="" required />
+			</li>
+			<li>
+				<label for="apodo" class="description">Apodo</label>
+				<input type="text" ng-model="nuevo.apodo" id="apodo" required name="apodo" class="element text medium"/>
+			</li>
+			<li>
+				<label for="email" class="description">Correo e</label>
+				<input type="email" ng-model="nuevo.email" id="email" name="email" required class="element text medium" type="email" required />
+			</li>
+			<li>
+				<label for="contrasenia" class="description">Contraseña</label>
+				<input ng-model="nuevo.password" id="contrasenia" name="contrasenia" class="element text small" type="password" maxlength="255" value="" required />&nbsp;<input ng-model="nuevo.repitePassword" id="nuevaContrasenia" name="nuevaContrasenia" class="element text small" type="password" maxlength="255" value="" required />
+			</li>
+			<li class="section_break">
+			</li>
+			<li class="buttons">
+				<button ng-click="guardar()"><img border="0" src="img/disk.gif"/> Guardar</button><button  ng-click="go('/')" ><img border="0" src="img/door_open.gif"/> Salir</button>
+			</li>
+		</ul>
+		</form>
+	<div id="footer">
+	</div>
+</div>

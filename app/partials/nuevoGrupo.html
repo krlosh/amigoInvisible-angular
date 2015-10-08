@@ -1,0 +1,30 @@
+<div id="form_container">
+	<h1><a>Amigo invisible</a></h1>
+	<form class="appnitro" method="post" id="formulario" name="formulario" >		
+		<div class="form_description">
+			<h2>Nuevo Grupo</h2>
+			<p>Crear un nuevo grupo o vincular uno existente a un usuario </p>
+		</div>
+		<ul>
+			<li>
+				<label class="description" for="listaGruposDisponibles">Grupos disponibles</label>
+				<select ng-model="grupoSeleccionado" class="element select medium" id="listaGruposDisponibles" name="listaGruposDisponibles">	
+					<option ng-repeat="grupo in listaGrupos" value="{{grupo.id}}">{{grupo.nombre}}</option>				
+				</select>
+			</li>
+			<li class="section_break">				
+			</li>
+			<li>
+				<label class="description" for="nombreNuevoGrupo">Nuevo</label>
+				<input type="text" ng-model="nuevo.nombre" id="nombreNuevoGrupo" name="nombreNuevoGrupo" class="element text medium" />
+			</li>
+			<li class="section_break">				
+			</li>
+			<li class="buttons">
+				<button ng-click="guardar()"><img border="0" src="img/disk.gif"/> Guardar</button><button  ng-click="go('/perfil');" ><img border="0" src="img/book_prev.gif"/> Volver</button><button  ng-click="logout()" ><img border="0" src="img/door_open.gif"/> Salir</button>
+			</li>
+		</ul>
+	</form>
+	<div id="footer">
+	</div>
+</div>

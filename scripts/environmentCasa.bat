@@ -1,0 +1,1 @@
+set PATH=%PATH%;C:\Users\krlosh\AppData\Roaming\npm;d:\utilidades\Git\bin;

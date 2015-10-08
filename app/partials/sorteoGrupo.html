@@ -1,0 +1,31 @@
+<div id="form_container">
+	<h1><a>Amigo invisible</a></h1>
+	<form class="appnitro" method="post" id="formulario" name="formulario" >		
+		<div class="form_description">
+			<h2>Sorteo directo de {{grupo.nombre}}</h2>
+			<p></p>
+		</div>
+		<ul>
+			<li><label class="description" for="nombreSorteo">Nombre</label>
+				<input id="nombreSorteo" name="nombreSorteo" ng-model="sorteo.nombre" class="element text medium" type="text" maxlength="255" value="" />
+			</li>
+			<li><label class="description" for="encabezadoSorteo">Introduccion</label>
+			<textarea rows="5" cols="20" name="encabezadoSorteo" id="encabezadoSorteo" ng-model="sorteo.introduccion" class="element textarea"></textarea>
+			</li>			
+			<li>
+			<label class="description" >Participantes</label>
+			<ul>				
+					<li ng-repeat="integrante in grupo.integrantes">{{integrante.nombre}}</li>
+				
+			</ul>
+			</li>
+			<li class="section_break">
+			</li>
+			<li class="buttons">
+				<button ng-click="sortear()"><img border="0" src="img/disk.gif"/>Sortear</button><button ng-click="go('/perfil')"><img border="0" src="img/book_prev.gif"/> Volver</button>
+			</li>
+		</ul>
+	</form>
+	<div id="footer">
+	</div>
+</div>

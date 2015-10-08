@@ -1,0 +1,63 @@
+<div id="form_container">
+	<h1><a>Amigo invisible</a></h1>
+	<form class="appnitro" method="post">
+		<div class="form_description">
+				<h2>Detalle de Grupo {{grupo.nombre}}</h2>
+				<p></p>
+		</div>
+		<ul>
+			<li id="li_amigos">
+				<label for="amigos" class="description">Amigos del grupo</label>
+				<ul>
+					<li ng-repeat="integrante in grupo.integrantes">{{integrante.nombre}}</li>
+					<li>si propietario:<a href="#" >Nuevo AMIGO</a></li>
+				</ul>
+			</li>
+			<li class="section_break">				
+			</li>
+			<li id="li_eventos">
+				<table class="cebreado">
+					<thead>
+						<tr>
+							<th colspan="3">Eventos <a ng-click="verNuevo()"><img border="0" src="img/calendar_add.gif"/></a></th>
+						</tr>
+						<tr>
+							<th colspan="2">Nombre</th>
+							<th>Fecha</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="evento in grupo.eventos | orderBy:'nombre'" id="filaEvento{{evento.idEvento}}">
+							<td><input type="hidden" name="eventos" /><a ng-click="eliminarEvento(evento);" ><img border="0" src="img/calendar_delete.gif"/></a></td>
+							<td>{{evento.nombre}}</td>
+							<td>{{evento.fecha}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			<div  ng-show="modoNuevo"><!--Oculto by default, visible al click en nuevo evento-->
+				<li class="section_break">	
+				</li>
+				<li id="li_nuevoEvento">
+					<div>
+						<span>
+							<label for="nombreNuevoEvento" class="description">Nombre</label>
+							<input type="text" id="nombreNuevoEvento" name="nombreNuevoEvento" ng-model="nuevoEvento.nombre" class="element text"/>
+						</span>
+						<span>
+						<label for="fechaEvento" class="description">Fecha</label>
+						<input type="text" id="fechaEvento" name="fechaEvento" ng-model="nuevoEvento.fecha" class="text" datepicker/></span>					
+					</div>
+				</li>
+			</div>
+			<li class="section_break">	
+			</li>
+			<li class="buttons"><!--Definir funciones que faltan al controller -->
+				<button ng-click="guardar()"><img border="0"  src="img/disk.gif"/>Guardar</button><button ng-click="borrar()"><img border="0" src="img/delete.gif"/> Borrar</button><button  ng-click="go('/sorteos/'+grupo.id)"><img border="0" src="img/clock.png"/> Sorteo</button><button ng-click="go('/perfil');"><img border="0" src="img/book_prev.gif"/> Volver</button>
+				<button ng-click="logout();" ><img border="0" src="img/door_open.gif"/> Salir</button>
+			</li>			
+		</ul>
+	</form>
+	<div id="footer">
+	</div>
+</div>

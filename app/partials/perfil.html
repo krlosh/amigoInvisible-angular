@@ -1,0 +1,57 @@
+<div id="form_container">
+	<h1><a>Amigo invisible</a></h1>
+	<form class="appnitro" method="post" id="formulario" name="formulario">
+		<input type="hidden" id="accion" name="accion" value="ConstantesWeb.ACCESO_GRUPO"/>
+		<input type="hidden" id="idGrupoSeleccionado" name="idGrupoSeleccionado"/>
+		<div class="form_description">
+			<h2>Hola {{perfil.login}}</h2>
+			<p></p>
+		</div>
+		<ul><!--Quitar id/nombre de los inputs?-->
+			<li>
+				<label for="apodo" class="description">Apodo</label>
+				<input type="text" ng-model="perfil.apodo" id="apodo" required name="apodo" class="element text medium" />
+			</li>
+			<li>
+				<label for="email" class="description">Correo e</label>
+				<input type="email" ng-model="perfil.email" id="perfil.email" required name="email" class="element text medium" />
+			</li>
+			<li>
+				<label for="contrasenia" class="description">Contraseña</label>
+				<input id="contrasenia" ng-model="passwd" name="contrasenia" class="element text small" type="password" maxlength="255" value="" />&nbsp;<input id="nuevaContrasenia" name="nuevaContrasenia" ng-model="passwdRepetida"  class="element text small" type="password" maxlength="255" value="" />
+			</li>
+			<li class="section_break">
+			</li>
+			<li>
+				<table class="cebreado">
+					<thead>
+						<tr>
+							<th colspan="3">GRUPOS</th>
+						</tr>						
+						<tr ng-hide="perfil.grupos">
+							<td colspan="3">No pertenece a ningún grupo</td><!--Solo visible si no grupos-->
+						</tr>
+						<tr ng-show="perfil.grupos">
+							<th colspan="2">Grupo</th>
+							<th>Próximo evento</th>
+						</tr>
+					</thead>
+					<tbody>					
+						<tr ng-repeat="grupo in perfil.grupos" id="filaGrupo{{grupo.id}}">
+							<td><img border="0" src="img/group_link_remove.gif" ng-click="quitarGrupo(grupo.id)"/></td>
+							<td><a href="#/grupos/{{grupo.id}}">{{grupo.nombre}}</a></td>
+							<td>{{grupo.proximoEvento.fecha}}</td>
+						</tr>					
+					</tbody>					
+				</table>
+			</li>
+			<li class="section_break">
+			</li>
+			<li class="buttons">
+				<button  ng-click="guardar()"><img border="0" src="img/disk.gif"/> Guardar</button><button ng-click="go('grupos/nuevo')"><img border="0" src="img/group_link_add.gif" /> Añadir Grupo</button><button ng-click="go('/sorteos/nuevo')"><img border="0" src="img/clock.png"/> Sorteo</button><button ng-click="logout();" ><img border="0" src="img/door_open.gif"/> Salir</button>
+			</li>
+		</ul>
+		</form>
+	<div id="footer">
+	</div>
+</div>
