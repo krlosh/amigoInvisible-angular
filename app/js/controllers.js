@@ -88,8 +88,9 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
  myAppControllers.controller('LoginCtrl',['$scope','UserService',function($scope,UserService){ 
  	$scope.loginData={
  		name:'',
- 		passwd:''
+ 		passwd:'' 		
  	};
+ 	$scope.messages=[];
  	$scope.login = function(){
  		//TODO verificar en backend
  		if($scope.loginData.name==$scope.loginData.passwd){
@@ -98,7 +99,8 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
  			$scope.go('/perfil');
  		}
  		else{
-			UserService.isLogged=false;
+ 			$scope.messages.push('Usuario/contraseña incorrecta');
+ 			UserService.isLogged=false;
  			UserService.userName='';
  		}
 
