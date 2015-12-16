@@ -125,7 +125,7 @@ myAppControllers.controller('RegistroController',['$scope',function($scope){
 	}
 }]);
 
-myAppControllers.controller('SorteoDirectoController','SorteosService',['$scope',function($scope,SorteosService){
+myAppControllers.controller('SorteoDirectoController',['$scope','SorteosService',function($scope,SorteosService){
 	$scope.sorteo={
 		nombre:'',
 		introduccion:'',
