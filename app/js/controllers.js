@@ -4,7 +4,9 @@
 var myAppControllers=angular.module('myApp.controllers', []);
 
 myAppControllers.controller('ListaGruposController', ['$scope','GruposService','PerfilesService',function($scope,GruposService,PerfilesService) {
-	$scope.listaGrupos=jQuery.grep(GruposService.getGrupos(),function (elemento,idx){
+
+
+	/*$scope.listaGrupos=jQuery.grep(GruposService.getGrupos(),function (elemento,idx){
 		var gruposUsuario = PerfilesService.cargaPerfil($scope.getLoggedUser.userName).grupos;
 		var encontrado=false;
 		for(var i=0;i<gruposUsuario.length;i++){
@@ -17,9 +19,29 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
 		}
 
 		});
+	*/
+	GruposService.getGrupos().then(function(todosGrupos){
+		PerfilesService.cargaPerfil($scope.getLoggedUser.userName).then(function (perfilUsuario) {
+			var gruposUsuario=perfilUsuario.grupos;
+			$scope.listaGrupos=jQuery.grep(todosGrupos,function(elemento,idx){
+				var encontrado=false;
+				for(var i=0;i<gruposUsuario.length;i++){
+					if(gruposUsuario[i].id==elemento.id){
+						encontrado = true;
+					}
+				}
+				if(!encontrado){
+					return elemento;
+				}
+			});
+			if($scope.listaGrupos.length>0){
+				$scope.grupoSeleccionado=$scope.listaGrupos[0].id;
+			}
+		});
+	});
 
 	$scope.nuevo={};
-	$scope.grupoSeleccionado=$scope.listaGrupos[0].id;
+	
 	$scope.guardar=function(){		
 		//si nuevo no vacio, crear y asignar a usuario logado
 		if($scope.nuevo.nombre&&$scope.nuevo.nombre!=''){
@@ -36,7 +58,9 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
   }]);
 
  myAppControllers.controller('PerfilController', ['$scope','PerfilesService',function($scope,PerfilesService) {
- 	$scope.perfil=PerfilesService.cargaPerfil($scope.getLoggedUser().userName);
+ 	PerfilesService.cargaPerfil($scope.getLoggedUser().userName).then(function(perfil){
+ 		$scope.perfil=perfil;	
+ 	});
  	//TODO:Guardar
  	$scope.quitarGrupo = function(grupoid){
  		PerfilesService.desenlazarPerfil($scope.perfil,grupoid); 		
@@ -56,7 +80,11 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
 
 
  myAppControllers.controller('GrupoController', ['$scope','$routeParams','GruposService',function($scope,$routeParams,GruposService) {
- 	$scope.grupo=GruposService.buscarGrupo($routeParams.grupoId); //TODO:quitar los grupos a los que pertenece el logged user
+ 	//$scope.grupo=GruposService.buscarGrupo($routeParams.grupoId); //TODO:quitar los grupos a los que pertenece el logged user
+ 	GruposService.buscarGrupo($routeParams.grupoId).then(function(grupo){
+ 		$scope.grupo=grupo;
+ 	});
+ 	
  	$scope.modoNuevo=false;
 
  	$scope.verNuevo = function(){
@@ -172,3 +200,5 @@ myAppControllers.controller('SorteoGrupoController', ['$scope','$routeParams','G
 		$scope.go('/grupos/'+$routeParams.grupoId);
 	};	
 }]);
+
+//Controlar que los servicios que van al servidor devuelven promises.

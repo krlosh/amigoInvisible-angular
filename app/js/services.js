@@ -12,14 +12,48 @@ myAppServices.value('version', '0.1');
 myAppServices.factory('UserService',[function(){
 	var sdo={
 		isLogged:false,
-		username:''
+		username:'',
+		token:''
 	};
 
 	return sdo;
 }]);
 
+myAppServices.factory('remoteApiFacade',['$http','$q',function($http,$q){
+	return {
+			server:'http://localhost:9080',
+	        handleError:function( response ) {
+                // The API response from the server should be returned in a
+                // nomralized format. However, if the request was not handled by the
+                // server (or what not handles properly - ex. server error), then we
+                // may have to normalize it on our end, as best we can.
+                if (
+                    ! angular.isObject( response.data ) ||
+                    ! response.data.message
+                    ) {
+                    return( $q.reject( "An unknown error occurred." ) );
+                }
+                // Otherwise, use expected error message.
+                return( $q.reject( response.data.message ) );
+            },
 
-myAppServices.factory('GruposService',[function(){
+            handleSuccess:function( response ) {
+                return( response.data );
+            },
+
+            get:function(url,paramsToSend){
+        	    var request = $http({
+                    method: "get",
+                    params: paramsToSend,
+                    url: this.server+url                    
+                });
+                return( request.then(this.handleSuccess, this.handleError ) );
+            }
+
+	}
+}]);
+
+myAppServices.factory('GruposService',['remoteApiFacade',function(remoteApiFacade){
 	return { //Importante. Los grupos deben tener integrantes y eventos aunque sean vacios
 		grupos:[{
 				id:0,
@@ -62,7 +96,9 @@ myAppServices.factory('GruposService',[function(){
 				eventos:[]
 				}],
 		getGrupos: function(){
-			return this.grupos;
+			//
+			//return this.grupos;
+			return remoteApiFacade.get('/amigoInvisible-rest/grupos');
 		},		
 		crearGrupo:function(grupo){
 			grupo.id=this.grupos.length;
@@ -70,12 +106,13 @@ myAppServices.factory('GruposService',[function(){
 		},
 		buscarGrupo:function(idGrupo){
 			//optimizar esta busqueda:
-			for(var i=0;i<this.grupos.length;i++){
+			/*for(var i=0;i<this.grupos.length;i++){
 				if(this.grupos[i].id==idGrupo){
 					return this.grupos[i];
 				}
 			}
-			return {};
+			return {};*/
+			return remoteApiFacade.get('/amigoInvisible-rest/grupos/'+idGrupo);
 		},
 		enlazarPerfil:function(idgrupo,perfil){
 			console.log(idgrupo);
@@ -96,11 +133,14 @@ myAppServices.factory('GruposService',[function(){
 	}
 }]);
 
-myAppServices.factory('PerfilesService',[function(){
+myAppServices.factory('PerfilesService',['remoteApiFacade',function(remoteApiFacade){
 	return {
 		cargaPerfil:function(login){
+
+			return remoteApiFacade.get('/amigoInvisible-rest/usuario/'+login);
+
 			//TODO:Busar el perfil del login.
-			return {login:login,
+			/*return {login:login,
  					apodo:'mio',
  					email:'a@b.es'
  					,
@@ -117,7 +157,7 @@ myAppServices.factory('PerfilesService',[function(){
  						nombre:'G3'
  						}
  					]
- 				};
+ 				};*/
 		},
 		desenlazarPerfil:function(perfil,grupoId){
 			var pos=-1;
@@ -148,15 +188,17 @@ myAppServices.factory('SorteosService',[function(){
 	}
 }]);
 
-/*URLs de backend a Crear ¿Como pasar el localhost para que sean direcciones relativas y no absolutas?*/
+/*URLs de backend a Crear ¿Como pasar el localhost para que sean direcciones relativas y no absolutas?
+Ver uso de servicio angular $http
+*/
 /*
 login			-> POST /sesion (SesionController)
 logout 			-> DELETE /sesion (SesionController)
 crearUser 		-> POST /usuario (UsuarioController)
 cargarPerfil 	-> GET /usuario/{perfilId} (UsuarioController)
 guardarPerfil	-> POST /usuario/{perfilId} (UsuarioController)
-desenlazarPerfil-> DELETE /grupos/usuario/{usuarioId} (GrupoController ???)
-enlazarPerfil	-> POST /grupos/usuario/{usuarioId} (GrupoController ???)
+desenlazarPerfil-> DELETE /grupos/{grupoId}/usuario?{integrante} 
+enlazarPerfil	-> POST /grupos/{grupoId}/usuario?{integrante} 
 getGrupos		-> GET /grupos (GrupoController )
 crearGrupo		-> POST /grupos (GrupoController )
 buscarGrupo		-> GET /grupos/{grupoId} (GrupoController )
