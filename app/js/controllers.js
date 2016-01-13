@@ -43,7 +43,7 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
  	};
 
  	$scope.guardar = function(){
- 		if( $scope.passwd){
+ 		if( $scope.passwd){//Si no se cambia la password no se cambia nada en el perfil
 	 		if($scope.passwdRepetida == $scope.passwd ){
 	 			PerfilesService.guardar($scope.perfil);
 	 		}
@@ -93,6 +93,8 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
  	$scope.messages=[];
  	$scope.login = function(){
  		//TODO verificar en backend
+ 		//El login deberia generar un token que se inlcuiría en todas las peticiones hacia el servidor ¿inyectando userService?
+ 		//http://blog.brunoscopelliti.com/authentication-to-a-restful-web-service-in-an-angularjs-web-app/ 		
  		if($scope.loginData.name==$scope.loginData.passwd){
  			UserService.isLogged=true;
  			UserService.userName=$scope.loginData.name;

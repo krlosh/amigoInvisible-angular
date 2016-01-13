@@ -20,7 +20,7 @@ myAppServices.factory('UserService',[function(){
 
 
 myAppServices.factory('GruposService',[function(){
-	return {
+	return { //Importante. Los grupos deben tener integrantes y eventos aunque sean vacios
 		grupos:[{
 				id:0,
 				nombre:'G1',
@@ -51,11 +51,15 @@ myAppServices.factory('GruposService',[function(){
 				},
 				{
 				id:10,
-				nombre:'G2'
+				nombre:'G2',
+				integrantes:[],
+				eventos:[]				
 				},
 				{
 				id:1,
-				nombre:'G3'
+				nombre:'G3',
+				integrantes:[],
+				eventos:[]
 				}],
 		getGrupos: function(){
 			return this.grupos;
@@ -143,3 +147,21 @@ myAppServices.factory('SorteosService',[function(){
 		}
 	}
 }]);
+
+/*URLs de backend a Crear ¿Como pasar el localhost para que sean direcciones relativas y no absolutas?*/
+/*
+login			-> POST /sesion (SesionController)
+logout 			-> DELETE /sesion (SesionController)
+crearUser 		-> POST /usuario (UsuarioController)
+cargarPerfil 	-> GET /usuario/{perfilId} (UsuarioController)
+guardarPerfil	-> POST /usuario/{perfilId} (UsuarioController)
+desenlazarPerfil-> DELETE /grupos/usuario/{usuarioId} (GrupoController ???)
+enlazarPerfil	-> POST /grupos/usuario/{usuarioId} (GrupoController ???)
+getGrupos		-> GET /grupos (GrupoController )
+crearGrupo		-> POST /grupos (GrupoController )
+buscarGrupo		-> GET /grupos/{grupoId} (GrupoController )
+guardarGrupo	-> POST /grupos/{grupoId} (GrupoController )
+eliminarEvento	-> DELETE /grupos/eventos/{eventoId} (EventoController)
+añadirEvento	-> POST /grupos/eventos/{eventoId} (EventoController)
+sortear 		-> POST /sorteo (SorteoController)
+*/
