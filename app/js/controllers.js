@@ -21,7 +21,7 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
 		});
 	*/
 	GruposService.getGrupos().then(function(todosGrupos){
-		PerfilesService.cargaPerfil($scope.getLoggedUser.userName).then(function (perfilUsuario) {
+		PerfilesService.cargaPerfil($scope.getLoggedUser().userName).then(function (perfilUsuario) {
 			var gruposUsuario=perfilUsuario.grupos;
 			$scope.listaGrupos=jQuery.grep(todosGrupos,function(elemento,idx){
 				var encontrado=false;
@@ -46,14 +46,18 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
 		//si nuevo no vacio, crear y asignar a usuario logado
 		if($scope.nuevo.nombre&&$scope.nuevo.nombre!=''){
 			var g = {id:-1,nombre:$scope.nuevo.nombre};
-			GruposService.crearGrupo(g);			
-			GruposService.enlazarPerfil(g.id,$scope.getLoggedUser().userName);
+			GruposService.crearGrupo(g).then(function(grupoCreado){
+				GruposService.enlazarPerfil(grupoCreado.id,$scope.getLoggedUser().userName).then(function (grupoCreado) {
+					$scope.go('/perfil');
+				});
+			});						
 		}
 		else{
 			//Asociar el grupo seleccionado al usuario logado			
-			GruposService.enlazarPerfil($scope.grupoSeleccionado,$scope.getLoggedUser().userName);
+			GruposService.enlazarPerfil($scope.grupoSeleccionado,$scope.getLoggedUser().userName).then(function (grupoCreado) {
+				$scope.go('/perfil');
+			});
 		}
-		$scope.go('/perfil');//???
 	};
   }]);
 
@@ -84,7 +88,7 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
  	GruposService.buscarGrupo($routeParams.grupoId).then(function(grupo){
  		$scope.grupo=grupo;
  	});
- 	
+
  	$scope.modoNuevo=false;
 
  	$scope.verNuevo = function(){
@@ -108,8 +112,9 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
  		}
  	};
  	$scope.borrar=function(){
- 		GruposService.borrar($scope.grupo);
- 		$scope.go('/perfil');
+ 		GruposService.borrar($scope.grupo).then(function(){
+ 			$scope.go('/perfil');
+ 		}); 		
  	}
   }]);
 
