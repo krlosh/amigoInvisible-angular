@@ -146,13 +146,13 @@ myAppServices.factory('SorteosService',[function(){
 			//nombre
 			//introduccion
 			//participantes.
+			//TODO: implementar llamada a backend
 			console.log('Sortear '+sorteo.nombre+' - ' + sorteo.introduccion+ ' - '+sorteo.participantes);
 		}
 	}
 }]);
 
-/*URLs de backend a Crear ¿Como pasar el localhost para que sean direcciones relativas y no absolutas?
-Ver uso de servicio angular $http
+/*URLs de backend a Crear 
 */
 /*
 login			-> POST /sesion (SesionController)
@@ -166,7 +166,7 @@ getGrupos		-> GET /grupos (GrupoController )
 crearGrupo		-> POST /grupos (GrupoController )
 buscarGrupo		-> GET /grupos/{grupoId} (GrupoController )
 guardarGrupo	-> POST /grupos/{grupoId} (GrupoController )
-eliminarEvento	-> DELETE /grupos/eventos/{eventoId} (EventoController)
-añadirEvento	-> POST /grupos/eventos/{eventoId} (EventoController)
+eliminarEvento	-> DELETE /grupos/{grupoId}/eventos/{eventoId} (EventoController)
+añadirEvento	-> POST /grupos/{grupoId}/eventos/{eventoId} (EventoController)
 sortear 		-> POST /sorteo (SorteoController)
 */
