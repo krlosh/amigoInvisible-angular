@@ -136,6 +136,21 @@ myAppServices.factory('PerfilesService',['remoteApiFacade',function(remoteApiFac
 		guardar:function(perfil){
 			//TODO: Implementar guardado
 			console.log('Guardando.....');
+		},
+		crear:function(perfil){
+			var data = {
+					userData:{
+						name: perfil.login,
+						password:perfil.password
+						},
+					amigo:{
+						login: perfil.login,
+						apodo: perfil.apodo,
+						email: perfil.email
+					}
+
+			};
+			return remoteApiFacade.post('/amigoInvisible-rest/usuario',data);
 		}
 	}
 }]);		

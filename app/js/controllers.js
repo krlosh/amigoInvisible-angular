@@ -119,8 +119,7 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
 	 			$scope.go('/perfil'); 		
 	 		},
 	            function (error) {
-	                // handle errors here
-	                console.log(error);
+	                // handle errors here	                
 	                $scope.messages=[];                
 	                $scope.messages.push(error);
 		 			UserService.isLogged=false;
@@ -133,18 +132,25 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
  }]);
 
 
-myAppControllers.controller('RegistroController',['$scope',function($scope){
+myAppControllers.controller('RegistroController',['$scope','PerfilesService',function($scope,PerfilesService){
 	$scope.nuevo={};
 	$scope.guardar = function(){
 		//TODO:Guardar nuevo usuario.
 		var validacionOK = true;
-		if($scope.nuevo.password!=$scope.nuevo.repitePassword){
-			//TODO: Mostrar msg de error
-			validacionOK=false;
-		}
-		//TODO:Resto de validaciones
-		if(validacionOK){
-			$scope.go('/');
+		if($scope.nuevo.login && $scope.nuevo.apodo && $scope.nuevo.email && $scope.nuevo.password && $scope.nuevo.repitePassword){
+			if($scope.nuevo.password!=$scope.nuevo.repitePassword){
+				//TODO: Mostrar msg de error
+				validacionOK=false;
+			}
+			//TODO:Resto de validaciones
+			if(validacionOK){
+				PerfilesService.crear($scope.nuevo).then(function(response){
+					$scope.go('/');	
+				},function (error) {
+					console.log(error);
+				});
+				
+			}
 		}
 	}
 }]);
