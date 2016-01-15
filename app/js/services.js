@@ -12,7 +12,7 @@ myAppServices.value('version', '0.1');
 myAppServices.factory('UserService',[function(){
 	var sdo={
 		isLogged:false,
-		username:'',		
+		userName:'',		
 		token:''
 	};
 
@@ -139,6 +139,20 @@ myAppServices.factory('PerfilesService',['remoteApiFacade',function(remoteApiFac
 		}
 	}
 }]);		
+
+myAppServices.factory('AutenticacionService',['remoteApiFacade',function(remoteApiFacade){
+	return {
+		validate:function(login,pass){
+			var credentials={name:login,
+							password:pass
+							};
+			return remoteApiFacade.post('/amigoInvisible-rest/sesion',credentials);
+		},
+		logout:function(token){
+			return remoteApiFacade.delete('/amigoInvisible-rest/sesion',token);
+		}
+	}
+}]);
 
 myAppServices.factory('SorteosService',[function(){
 	return {

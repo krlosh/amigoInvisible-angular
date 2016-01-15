@@ -49,7 +49,7 @@ myApp.config(['$routeProvider', function($routeProvider) {
 }]);  
 
 
-myApp.run(['$rootScope', '$location','$window','UserService',  function ($rootScope, $location, $window,UserService) {
+myApp.run(['$rootScope', '$location','$window','UserService','AutenticacionService',  function ($rootScope, $location, $window,UserService,AutenticacionService) {
 	'use strict';
 	$rootScope.go = function (path){
 		 if (path === 'back') { // Allow a 'back' keyword to go to previous page
@@ -61,6 +61,7 @@ myApp.run(['$rootScope', '$location','$window','UserService',  function ($rootSc
         }
 	};
   $rootScope.logout = function(){
+    AutenticacionService.logout(UserService.token);
     UserService.isLogged=false;
     UserService.userName='';
     console.log("logging out");

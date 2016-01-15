@@ -101,28 +101,34 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
  	}
   }]);
 
- myAppControllers.controller('LoginCtrl',['$scope','UserService',function($scope,UserService){ 
+ myAppControllers.controller('LoginCtrl',['$scope','UserService','AutenticacionService',function($scope,UserService,AutenticacionService){ 
  	$scope.loginData={
  		name:'',
  		passwd:'' 		
  	};
  	$scope.messages=[];
- 	$scope.login = function(){
- 		//TODO verificar en backend
+ 	$scope.login = function(){ 		
  		//El login deberia generar un token que se inlcuiría en todas las peticiones hacia el servidor ¿inyectando userService?
  		//http://blog.brunoscopelliti.com/authentication-to-a-restful-web-service-in-an-angularjs-web-app/ 		
- 		if($scope.loginData.name==$scope.loginData.passwd){
- 			UserService.isLogged=true;
- 			UserService.userName=$scope.loginData.name;
- 			$scope.go('/perfil');
+	 	if($scope.loginData.name!='' && $scope.loginData.passwd!=''){
+	 		AutenticacionService.validate($scope.loginData.name,$scope.loginData.passwd).then(function(response){
+	 			//como ver si hay error de autenticacion????
+				UserService.isLogged=true;
+	 			UserService.userName=$scope.loginData.name;
+	 			UserService.token=response;
+	 			$scope.go('/perfil'); 		
+	 		},
+	            function (error) {
+	                // handle errors here
+	                console.log(error);
+	                $scope.messages=[];                
+	                $scope.messages.push(error);
+		 			UserService.isLogged=false;
+		 			UserService.userName=''; 
+		 			$scope.loginData.passwd='';			
+	            });
+	 		console.log('user:'+UserService.userName); 		
  		}
- 		else{
- 			$scope.messages.push('Usuario/contraseña incorrecta');
- 			UserService.isLogged=false;
- 			UserService.userName='';
- 		}
-
- 		console.log('user:'+UserService.userName); 		
  	}; 	
  }]);
 

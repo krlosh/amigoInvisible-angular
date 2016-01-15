@@ -5,7 +5,7 @@
 			<h2>Acceda a su perfil</h2>
 			<p>Introduzca su nombre y contraseña</p>
 		</div>
-		<p ng-show="messages.length>0" class="error" ng-repeat="m in messages">{{m}}</p>
+		<p ng-show="messages.length>0" class="error" ng-repeat="m in messages track by $index">{{m}}</p>
 		<ul>
 			<li><label class="description" for="login">Nombre</label>
 				<input id="login" name="login" ng-model="loginData.name" class="element text medium" type="text" maxlength="255" value="" required/>
