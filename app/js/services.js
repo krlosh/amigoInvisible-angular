@@ -176,14 +176,14 @@ myAppServices.factory('AutenticacionService',['remoteApiFacade',function(remoteA
 	}
 }]);
 
-myAppServices.factory('SorteosService',[function(){
+myAppServices.factory('SorteosService',['remoteApiFacade',function(remoteApiFacade){
 	return {
 		sortear:function(sorteo){
 			//nombre
 			//introduccion
-			//participantes.
-			//TODO: implementar llamada a backend
+			//participantes.			
 			console.log('Sortear '+sorteo.nombre+' - ' + sorteo.introduccion+ ' - '+sorteo.participantes);
+			return remoteApiFacade.post('/amigoInvisible-rest/sorteo',sorteo);
 		}
 	}
 }]);
