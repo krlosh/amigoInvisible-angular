@@ -133,9 +133,16 @@ myAppServices.factory('PerfilesService',['remoteApiFacade',function(remoteApiFac
 				return remoteApiFacade.delete('/amigoInvisible-rest/grupos/'+grupoId+'/usuario',integrante);
 			}
 		},
-		guardar:function(perfil){
-			//TODO: Implementar guardado
+		guardar:function(perfil,password){			
 			console.log('Guardando.....');
+			var data={
+					userData:{
+						name: perfil.login,
+						password:password
+					},
+					amigo:perfil
+				};				
+			return remoteApiFacade.post('/amigoInvisible-rest/usuario/'+perfil.login,data);
 		},
 		crear:function(perfil){
 			var data = {

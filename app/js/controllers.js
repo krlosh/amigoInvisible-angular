@@ -57,7 +57,12 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
  	$scope.guardar = function(){
  		if( $scope.passwd){//Si no se cambia la password no se cambia nada en el perfil
 	 		if($scope.passwdRepetida == $scope.passwd ){
-	 			PerfilesService.guardar($scope.perfil);
+	 			PerfilesService.guardar($scope.perfil,$scope.passwd).then(function(amigo){
+					$scope.passwdRepetida='';
+	 				$scope.passwd='';
+	 			},function(error){
+	 				console.log('ERROR:'+error);
+	 			});
 	 		}
 	 		else{
 	 			alert("Contraseña incorrecta ") ;
