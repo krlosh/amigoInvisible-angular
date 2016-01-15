@@ -139,12 +139,10 @@ myAppControllers.controller('ListaGruposController', ['$scope','GruposService','
 
 myAppControllers.controller('RegistroController',['$scope','PerfilesService',function($scope,PerfilesService){
 	$scope.nuevo={};
-	$scope.guardar = function(){
-		//TODO:Guardar nuevo usuario.
+	$scope.guardar = function(){		
 		var validacionOK = true;
 		if($scope.nuevo.login && $scope.nuevo.apodo && $scope.nuevo.email && $scope.nuevo.password && $scope.nuevo.repitePassword){
-			if($scope.nuevo.password!=$scope.nuevo.repitePassword){
-				//TODO: Mostrar msg de error
+			if($scope.nuevo.password!=$scope.nuevo.repitePassword){				
 				validacionOK=false;
 			}
 			//TODO:Resto de validaciones
