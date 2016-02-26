@@ -21,7 +21,8 @@ myAppServices.factory('UserService',[function(){
 
 myAppServices.factory('remoteApiFacade',['$http','$q',function($http,$q){
 	return {
-			server:'http://localhost:9080',
+			server:'http://localhost:8181',
+			contexto:'',//En desarrollo es el contexto por defecto no /amigoInvisible-rest
 	        handleError:function( response ) {
                 // The API response from the server should be returned in a
                 // nomralized format. However, if the request was not handled by the
@@ -45,7 +46,7 @@ myAppServices.factory('remoteApiFacade',['$http','$q',function($http,$q){
         	    var request = $http({
                     method: "get",
                     params: paramsToSend,
-                    url: this.server+url                    
+                    url: this.server+this.contexto+url                    
                 });
                 return( request.then(this.handleSuccess, this.handleError ) );
             },
@@ -54,7 +55,7 @@ myAppServices.factory('remoteApiFacade',['$http','$q',function($http,$q){
             	 var request = $http({
                     method: "post",
                     data: dataToSend,
-                    url: this.server+url, 
+                    url: this.server+this.contexto+url, 
                     headers: {
             			'Content-Type': 'application/json'
    					} 
@@ -65,7 +66,7 @@ myAppServices.factory('remoteApiFacade',['$http','$q',function($http,$q){
             	var request = $http({
                     method: "delete",                    
                     data: dataToSend,
-                    url: this.server+url , 
+                    url: this.server+this.contexto+url , 
                     headers: {
             			'Content-Type': 'application/json'
    					}                  
@@ -78,32 +79,32 @@ myAppServices.factory('remoteApiFacade',['$http','$q',function($http,$q){
 myAppServices.factory('GruposService',['remoteApiFacade',function(remoteApiFacade){
 	return { //Importante. Los grupos deben tener integrantes y eventos aunque sean vacios
 		getGrupos: function(){						
-			return remoteApiFacade.get('/amigoInvisible-rest/grupos');
+			return remoteApiFacade.get('/grupos');
 		},		
 		crearGrupo:function(grupo){			
-			return remoteApiFacade.post('/amigoInvisible-rest/grupos',grupo);
+			return remoteApiFacade.post('/grupos',grupo);
 		},
 		buscarGrupo:function(idGrupo){			
-			return remoteApiFacade.get('/amigoInvisible-rest/grupos/'+idGrupo);
+			return remoteApiFacade.get('/grupos/'+idGrupo);
 		},
 		enlazarPerfil:function(idgrupo,perfil){
 			console.log(idgrupo);
-			return remoteApiFacade.post('/amigoInvisible-rest/grupos/'+idgrupo+'/usuario',perfil);			
+			return remoteApiFacade.post('/grupos/'+idgrupo+'/usuario',perfil);			
 		},
 		eliminarEvento:function(grupo,evento){
-			remoteApiFacade.delete('/amigoInvisible-rest/grupos/'+grupo.id+'/eventos/'+evento.id);
+			remoteApiFacade.delete('/grupos/'+grupo.id+'/eventos/'+evento.id);
 			var idx = grupo.eventos.indexOf(evento);
  			grupo.eventos.splice(idx,1);
 		},
 		anadirEvento:function(grupo,evento){
-			remoteApiFacade.post('/amigoInvisible-rest/grupos/'+grupo.id+'/eventos',evento).then(function(evento){
+			remoteApiFacade.post('/grupos/'+grupo.id+'/eventos',evento).then(function(evento){
 				grupo.eventos.push(evento);
 			});
 			
 		},
 		borrar:function(grupo){
 			console.log('Borrando ....');
-			return remoteApiFacade.delete('/amigoInvisible-rest/grupos/'+grupo.id);
+			return remoteApiFacade.delete('/grupos/'+grupo.id);
 		}
 	}
 }]);
@@ -112,7 +113,7 @@ myAppServices.factory('PerfilesService',['remoteApiFacade',function(remoteApiFac
 	return {
 		cargaPerfil:function(login){
 
-			return remoteApiFacade.get('/amigoInvisible-rest/usuario/'+login);
+			return remoteApiFacade.get('/usuario/'+login);
 
 		},
 		desenlazarPerfil:function(perfil,grupoId){
@@ -130,7 +131,7 @@ myAppServices.factory('PerfilesService',['remoteApiFacade',function(remoteApiFac
 			}
 			if(pos!=-1){
 				perfil.grupos.splice(pos,1);
-				return remoteApiFacade.delete('/amigoInvisible-rest/grupos/'+grupoId+'/usuario',integrante);
+				return remoteApiFacade.delete('/grupos/'+grupoId+'/usuario',integrante);
 			}
 		},
 		guardar:function(perfil,password){			
@@ -142,7 +143,7 @@ myAppServices.factory('PerfilesService',['remoteApiFacade',function(remoteApiFac
 					},
 					amigo:perfil
 				};				
-			return remoteApiFacade.post('/amigoInvisible-rest/usuario/'+perfil.login,data);
+			return remoteApiFacade.post('/usuario/'+perfil.login,data);
 		},
 		crear:function(perfil){
 			var data = {
@@ -157,7 +158,7 @@ myAppServices.factory('PerfilesService',['remoteApiFacade',function(remoteApiFac
 					}
 
 			};
-			return remoteApiFacade.post('/amigoInvisible-rest/usuario',data);
+			return remoteApiFacade.post('/usuario',data);
 		}
 	}
 }]);		
@@ -168,10 +169,10 @@ myAppServices.factory('AutenticacionService',['remoteApiFacade',function(remoteA
 			var credentials={name:login,
 							password:pass
 							};
-			return remoteApiFacade.post('/amigoInvisible-rest/sesion',credentials);
+			return remoteApiFacade.post('/sesion',credentials);
 		},
 		logout:function(token){
-			return remoteApiFacade.delete('/amigoInvisible-rest/sesion',token);
+			return remoteApiFacade.delete('/sesion',token);
 		}
 	}
 }]);
@@ -183,7 +184,7 @@ myAppServices.factory('SorteosService',['remoteApiFacade',function(remoteApiFaca
 			//introduccion
 			//participantes.			
 			console.log('Sortear '+sorteo.nombre+' - ' + sorteo.introduccion+ ' - '+sorteo.participantes);
-			return remoteApiFacade.post('/amigoInvisible-rest/sorteo',sorteo);
+			return remoteApiFacade.post('/sorteo',sorteo);
 		}
 	}
 }]);
